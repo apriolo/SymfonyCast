@@ -2,7 +2,7 @@
 parameters:
     database_host: symfonycerto_mysql_1
     database_port: 3306
-    database_name: symfony
+    database_name: yoda_event
     database_user: root
     database_password: 1234
     mailer_transport: smtp
