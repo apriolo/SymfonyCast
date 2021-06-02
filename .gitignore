@@ -1,5 +1,6 @@
 mysql
 .idea
 app/symfony/vendor
-app/symfony/app/cache/
+app/symfony/app/cache
+app/symfony/app/logs
 app/symfony/bin
