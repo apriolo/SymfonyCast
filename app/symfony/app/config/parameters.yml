@@ -1,6 +1,6 @@
 # This file is auto-generated during the composer install
 parameters:
-    database_host: symfonycerto_mysql_1
+    database_host: 127.0.0.1
     database_port: 3306
     database_name: yoda_event
     database_user: root

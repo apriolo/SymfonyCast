@@ -1,3 +1,12 @@
+#event_event:
+#    resource: "@EventBundle/Resources/config/routing/event.yml"
+#    prefix:   /event
+
 event_homepage:
     path:     /teste/{name}
     defaults: { _controller: EventBundle:Default:index }
+
+event_annotations:
+    resource: "@EventBundle/Controller"
+    prefix:   /event
+    type: annotation

@@ -1,24 +1,63 @@
-# To get started with security, check out the documentation:
-# https://symfony.com/doc/current/security.html
-security:
+## To get started with security, check out the documentation:
+## https://symfony.com/doc/current/security.html
+#security:
+#
+#    # https://symfony.com/doc/current/security.html#b-configuring-how-users-are-loaded
+#    providers:
+#        in_memory:
+#            memory: ~
+#
+#    firewalls:
+#        # disables authentication for assets and the profiler, adapt it according to your needs
+#        dev:
+#            pattern: ^/(_(profiler|wdt)|css|images|js)/
+#            security: false
+#
+#        main:
+#            anonymous: ~
+#            # activate different ways to authenticate
+#
+#            # https://symfony.com/doc/current/security.html#a-configuring-how-your-users-will-authenticate
+#            #http_basic: ~
+#
+#            # https://symfony.com/doc/current/security/form_login_setup.html
+#            #form_login: ~
 
-    # https://symfony.com/doc/current/security.html#b-configuring-how-users-are-loaded
+# Codigo de security do projeto exemplo
+security:
+    encoders:
+        Symfony\Component\Security\Core\User\User: plaintext
+
+    role_hierarchy:
+        ROLE_ADMIN:       ROLE_USER
+        ROLE_SUPER_ADMIN: [ROLE_USER, ROLE_ADMIN, ROLE_ALLOWED_TO_SWITCH]
+
     providers:
         in_memory:
-            memory: ~
+            memory:
+                users:
+                    user:  { password: userpass, roles: [ 'ROLE_USER' ] }
+                    admin: { password: adminpass, roles: [ 'ROLE_ADMIN' ] }
 
+    # o firewall é a parte responsavel pela autenticação dentro da aplicação
     firewalls:
-        # disables authentication for assets and the profiler, adapt it according to your needs
-        dev:
-            pattern: ^/(_(profiler|wdt)|css|images|js)/
-            security: false
-
-        main:
+        secured_area:
+            pattern:    ^/
+            form_login:
+                # As rotas de formulario de login e check login dentro de UserBundle/Controller/EventController
+                check_path: login_check
+                login_path: login_form
+            logout:
+                path: logout
+                target: event_index
+            ## Para permitir o acesso anonimo na aplicação, não é necessario fazer login
             anonymous: ~
-            # activate different ways to authenticate
+            #http_basic:
+            #    realm: "Secured Demo Area"
 
-            # https://symfony.com/doc/current/security.html#a-configuring-how-your-users-will-authenticate
-            #http_basic: ~
-
-            # https://symfony.com/doc/current/security/form_login_setup.html
-            #form_login: ~
+    access_control:
+        # criando um acess controle de login na page de new
+        # é possivel criar varias ROLES, com admin, IP, localizacao e https de request
+        - { path: ^/event/new, roles: ROLE_USER }
+        - { path: ^/event/create, roles: ROLE_USER }
+        #- { path: ^/login, roles: IS_AUTHENTICATED_ANONYMOUSLY, requires_channel: https }
