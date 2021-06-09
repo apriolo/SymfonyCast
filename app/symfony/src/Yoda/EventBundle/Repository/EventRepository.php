@@ -10,4 +10,13 @@ namespace Yoda\EventBundle\Repository;
  */
 class EventRepository extends \Doctrine\ORM\EntityRepository
 {
+    public function getUpComingEvents()
+    {
+        return $this->createQueryBuilder ( 'e' )
+            ->addOrderBy ( 'e.time' ,  'ASC' )
+            ->andWhere('e.time>:now')
+            ->setParameter('now', new \DateTime())
+            ->getQuery ()
+            ->execute ();
+    }
 }

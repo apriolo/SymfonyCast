@@ -2,7 +2,11 @@
 
 namespace Yoda\EventBundle\Entity;
 
+use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
+use Yoda\UserBundle\Entity\User;
+use Gedmo\Mapping\Annotation as Gedmo;
+
 
 /**
  * Event
@@ -49,6 +53,48 @@ class Event
      */
     private $details;
 
+    /**
+     * @ORM\ManyToOne (targetEntity="Yoda\UserBundle\Entity\User", inversedBy="events")
+     * @ORM\JoinColumn(onDelete="CASCADE")
+     */
+    private $owner;
+
+    // propriedade para aprendizado
+    // o sluggable faz com que o campo nunca seja diferente
+    // do primeiro utilizado
+    /**
+     * @Gedmo\Slug (fields={"name"}, updatable=false)
+     * @ORM\Column (type="string", length=255, unique=true)
+     */
+    protected $slug;
+
+    // created e updated at
+    /**
+     * @Gedmo\Timestampable (on="create")
+     * @ORM\Column (type="datetime")
+     */
+    private $createdAt;
+
+    /**
+     * @Gedmo\Timestampable (on="update")
+     * @ORM\Column (type="datetime")
+     */
+    private $updatedAt;
+
+    /**
+     * @ORM\ManyToMany (targetEntity="Yoda\UserBundle\Entity\User")
+     * @ORM\JoinTable (
+     *     inverseJoinColumns={@ORM\JoinColumn(onDelete="CASCADE")}
+     * )
+     */
+    private $attendees;
+
+    // Construtor para receber as relacoes
+
+    public function __construct()
+    {
+        $this->attendees = new ArrayCollection();
+    }
 
     /**
      * Get id
@@ -154,6 +200,60 @@ class Event
     public function getDetails()
     {
         return $this->details;
+    }
+
+    /**
+     * @param User $owner
+     * @return Event
+     */
+    public function setOwner(User $owner)
+    {
+        $this->owner = $owner;
+        return $this;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getOwner()
+    {
+        return $this->owner;
+    }
+
+
+    public function getSlug()
+    {
+        return $this->slug;
+    }
+
+
+    public function setSlug($slug)
+    {
+        $this->slug = $slug;
+        return $this;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getCreatedAt()
+    {
+        return $this->createdAt;
+    }
+
+    public function getUpdatedAt()
+    {
+        return $this->updatedAt;
+    }
+
+    public function getAttendees()
+    {
+        return $this->attendees;
+    }
+
+    public function hasAttendee(User $user)
+    {
+        return $this->getAttendees()->contains($user);
     }
 }
 

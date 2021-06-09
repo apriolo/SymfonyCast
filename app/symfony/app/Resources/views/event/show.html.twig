@@ -14,12 +14,17 @@
             <section>
                 <h1>
                     {{ entity.name }}
-                    <a class="button" href="{{ path('event_edit', {'id': entity.id}) }}">edit</a>
+                    {% if app.user == entity.owner %}
+                        <a class="button" href="{{ path('event_edit', {'slug': entity.slug}) }}">edit</a>
+                    {% endif %}
                 </h1>
 
                 <dl>
                     <dt>where:</dt>
                     <dd>{{ entity.location }}</dd>
+
+                    <dt>owner:</dt>
+                    <dd>{{ entity.owner.username }}</dd>
 
                     <dt>when:</dt>
                     <dd>{{ entity.time | date('g:ia / l M j, Y') }}</dd>
@@ -27,11 +32,29 @@
                     <dt>what:</dt>
                     <dd>{{ entity.details }}</dd>
 
+                    <dt>Attendees:</dt>
+                    <dd>{{ entity.attendees | length }}</dd>
+
                     <dt>who:</dt>
                     <dd>
                         <ul class="users">
-                            <li>nobody yet!</li>
+                            {% for attendee in entity.attendees %}
+                                {{ attendee }}
+                            {% else %}
+                                <li>nobody yet!</li>
+                            {% endfor %}
                         </ul>
+
+                        {% if entity.hasAttendee(app.user) %}
+                            <a href="{{ path("event_unattend", {id: entity.id}) }}" class="btn btn-warning btn-xs">
+                                I dont want to go more
+                            </a>
+                        {% else %}
+                            <a href="{{ path("event_attend", {id: entity.id}) }}" class="btn btn-success btn-xs">
+                                I want to go!
+                            </a>
+                        {% endif %}
+
                     </dd>
                 </dl>
             </section>

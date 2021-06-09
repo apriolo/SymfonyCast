@@ -14,7 +14,7 @@ event_new:
     methods:  [GET, POST]
 
 event_edit:
-    path:     /{id}/edit
+    path:     /{slug}/edit
     defaults: { _controller: "EventBundle:Event:edit" }
     methods:  [GET, POST]
 

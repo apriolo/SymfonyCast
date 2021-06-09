@@ -3,6 +3,13 @@
     <section class="events">
         <header id="menu">
             <a class="button" href="{{ path('event_new') }}">Create new event</a>
+
+            {#Verificação para saber se o usuario esta logado#}
+            {% if is_granted('IS_AUTHENTICATED_REMEMBERED') %}
+                <a class="button" href="{{ path('logout') }}">Logout</a>
+            {% else %}
+                <a class="button" href="{{ path('login_form') }}">Login</a>
+            {% endif %}
         </header>
         {% for entity in events %}
             <article>
@@ -11,7 +18,7 @@
                 </header>
                 <section>
                     <h3>
-                        <a href="{{ path('event_show', {'id': entity.id}) }}">{{ entity.name }}</a>
+                        <a href="{{ path('event_show', {'slug': entity.slug}) }}">{{ entity.name }}</a>
                     </h3>
                     <dl>
                         <dt>where:</dt>
@@ -19,7 +26,7 @@
                         <dt>when:</dt>
                         <dd>{{ entity.time | date('g:ia / l M j, Y') }}</dd>
                         <dt>who:</dt>
-                        <dd>Todo # of people</dd>
+                        <dd>{{ entity.attendees|length }} attendees!</dd>
                     </dl>
                 </section>
             </article>

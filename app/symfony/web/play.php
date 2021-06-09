@@ -18,6 +18,21 @@ $container->set('request', $request);
 
 $templating = $container->get('templating');
 
+// testando o mapeamento manytoone events e users
+$em = $container->get('doctrine')->getManager();
+
+$user = $em
+    ->getRepository('UserBundle:User')
+    ->findOneBy(array('username' => 'user'))
+;
+
+foreach ($user->getEvents() as $event) {
+    var_dump($event->getName());
+}
+
+exit();
+
+// Testando inserts de usuarios e eventos
 use Yoda\EventBundle\Entity\Event;
 
 $event = new Event();

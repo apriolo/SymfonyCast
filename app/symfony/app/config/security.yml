@@ -26,18 +26,25 @@
 # Codigo de security do projeto exemplo
 security:
     encoders:
-        Symfony\Component\Security\Core\User\User: plaintext
+        # Definindo a entity de users
+        Yoda\UserBundle\Entity\User: bcrypt
 
     role_hierarchy:
-        ROLE_ADMIN:       ROLE_USER
+        ROLE_USER: [ROLE_EVENT_CREATE]
+        ROLE_ADMIN:       [ROLE_USER, ROLE_EVENT_CREATE]
         ROLE_SUPER_ADMIN: [ROLE_USER, ROLE_ADMIN, ROLE_ALLOWED_TO_SWITCH]
 
     providers:
-        in_memory:
-            memory:
-                users:
-                    user:  { password: userpass, roles: [ 'ROLE_USER' ] }
-                    admin: { password: adminpass, roles: [ 'ROLE_ADMIN' ] }
+        our_database_users:
+            #determina a entidade responsavel pelo login e a propriedade ex username ou email
+            entity:
+                class: UserBundle:User
+#        providers padrao do projeto inicial para usar como login user e userpass
+#        in_memory:
+#            memory:
+#                users:
+#                    user:  { password: userpass, roles: [ 'ROLE_USER' ] }
+#                    admin: { password: adminpass, roles: [ 'ROLE_ADMIN' ] }
 
     # o firewall é a parte responsavel pela autenticação dentro da aplicação
     firewalls:
@@ -58,6 +65,15 @@ security:
     access_control:
         # criando um acess controle de login na page de new
         # é possivel criar varias ROLES, com admin, IP, localizacao e https de request
-        - { path: ^/event/new, roles: ROLE_USER }
-        - { path: ^/event/create, roles: ROLE_USER }
+        # Passamos essas configurações de permissao nas rotas para o Controller
+#        - { path: ^/event/new, roles: ROLE_USER }
+#        - { path: ^/event/create, roles: ROLE_USER }
         #- { path: ^/login, roles: IS_AUTHENTICATED_ANONYMOUSLY, requires_channel: https }
+
+        # Acesso apenas logado em todas a pagnas menos a de registor e login
+        # junto aos arquivos que precisam estar publicos ,css js images
+        - { path: ^/login, roles: IS_AUTHENTICATED_ANONYMOUSLY }
+        - { path: ^/register, roles: IS_AUTHENTICATED_ANONYMOUSLY }
+        - { path: ^/(css|js), roles: IS_AUTHENTICATED_ANONYMOUSLY }
+        - { path: ^/(_wdt|_profiler), roles: IS_AUTHENTICATED_ANONYMOUSLY }
+        - { path: ^/, roles: ROLE_USER }
