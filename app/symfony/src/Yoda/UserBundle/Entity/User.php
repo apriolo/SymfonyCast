@@ -268,6 +268,7 @@ class User implements AdvancedUserInterface, \Serializable
     public function setPlainPassword(string $plainPassword)
     {
         $this->plainPassword = $plainPassword;
+        $this->setPassword(null);
         return $this;
     }
 

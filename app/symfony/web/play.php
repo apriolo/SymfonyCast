@@ -18,6 +18,22 @@ $container->set('request', $request);
 
 $templating = $container->get('templating');
 
+// Testing event listener to update
+
+$em = $container->get('doctrine')
+    ->getEntityManager()
+;
+
+$user = $em
+    ->getRepository('UserBundle:User')
+    ->findOneByUsernameOrEmail('user');
+
+$user->setPlainPassword('new');
+$em->persist($user);
+$em->flush();
+
+exit();
+
 // testando o mapeamento manytoone events e users
 $em = $container->get('doctrine')->getManager();
 

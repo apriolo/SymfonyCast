@@ -30,19 +30,37 @@ class EventController extends Controller
      */
     public function indexAction()
     {
-        $em = $this->getDoctrine()->getManager();
+        // para renderizar apenas pedaços de codigos
+        return array();
+
+
+//        $em = $this->getDoctrine()->getManager();
 
         // Find all events
 //        $events = $em->getRepository('EventBundle:Event')->findAll();
         // Criar query para apresentar apenas os eventos que vao acontecer
-        $events = $em->getRepository('EventBundle:Event')->getUpComingEvents();
+//        $events = $em->getRepository('EventBundle:Event')->getUpComingEvents();
 
 //        return $this->render('event/index.html.twig', array(
 //            'events' => $events,
 //        ));
 
         // return usando a annotation de render template
-        return array('events' => $events);
+//        return array('events' => $events);
+    }
+
+    // Fnction para renderizar apenas pedaços de codigos
+    public function _upcomingEventsAction($max = null)
+    {
+        $em = $this->getDoctrine()->getManager();
+
+        $events = $em->getRepository('EventBundle:Event')
+            ->getUpcomingEvents($max)
+        ;
+
+        return $this->render('event/_upcomingEvents.html.twig', array(
+            'events' => $events,
+        ));
     }
 
     /**

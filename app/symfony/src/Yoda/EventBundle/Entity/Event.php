@@ -13,6 +13,7 @@ use Gedmo\Mapping\Annotation as Gedmo;
  *
  * @ORM\Table(name="yoda_event")
  * @ORM\Entity(repositoryClass="Yoda\EventBundle\Repository\EventRepository")
+ * @ORM\HasLifecycleCallbacks
  */
 class Event
 {
@@ -69,8 +70,9 @@ class Event
     protected $slug;
 
     // created e updated at
+    // antes utilizava o @Gedmo\Timestampable (on="create")
+    // agora utiuliza o prePersist funcao que roda antes de realizar o persist
     /**
-     * @Gedmo\Timestampable (on="create")
      * @ORM\Column (type="datetime")
      */
     private $createdAt;
@@ -254,6 +256,17 @@ class Event
     public function hasAttendee(User $user)
     {
         return $this->getAttendees()->contains($user);
+    }
+
+    /**
+     * @ORM\PrePersist
+     */
+    // funcao que roda antes do persist, porem não da pra usar outras dependencias
+    public function prePersist()
+    {
+        if (!$this->getCreatedAt()) {
+            $this->createdAt = new \DateTime();
+        }
     }
 }
 
