@@ -4,13 +4,31 @@
         <meta charset="UTF-8" />
         {# para remover os espaços nas tags de texto usar - nas tags#}
         <title>{%- block title -%}Welcome!{%- endblock -%}</title>
+
+{# no symfony 2.8 precisa importar a classe  composer require symfony/assetic-bundle
+    tive problemas ao utiliza-la (versões incompativeis) decidi por nao utilizar #}
         {% block stylesheets %}
+             link tag for bootstrap...
             <link rel="stylesheet" href="//netdna.bootstrapcdn.com/bootstrap/3.1.1/css/bootstrap.min.css"/>
-            <link rel="stylesheet" href="{{ asset('bundles/event/css/event.css') }}" />
-            <link rel="stylesheet" href="{{ asset('bundles/event/css/events.css') }}" />
-            <link rel="stylesheet" href="{{ asset('bundles/event/css/main.css') }}" />
+            {% stylesheets
+                'bundles/event/css/event.css'
+                'bundles/event/css/events.css'
+                'bundles/event/css/main.css'
+                filter='cssrewrite'
+            %}
+                <link rel="stylesheet" href="{{ asset_url }}" />
+            {% endstylesheets %}
         {% endblock %}
-        <link rel="icon" type="image/x-icon" href="{{ asset('favicon.ico') }}" />
+
+{# not using assets rewrite #}
+{#        {% block stylesheets %}#}
+{#            <link rel="stylesheet" href="//netdna.bootstrapcdn.com/bootstrap/3.1.1/css/bootstrap.min.css"/>#}
+{#            <link rel="stylesheet" href="{{ asset('bundles/event/css/event.css') }}" />#}
+{#            <link rel="stylesheet" href="{{ asset('bundles/event/css/events.css') }}" />#}
+{#            <link rel="stylesheet" href="{{ asset('bundles/event/css/main.css') }}" />#}
+{#        {% endblock %}#}
+
+{#        <link rel="icon" type="image/x-icon" href="{{ asset('favicon.ico') }}" />#}
     </head>
     <body>
     {% if app.session.flashBag.has('success') %}

@@ -24,11 +24,18 @@
                 {# Para gerar os atributos 1 a 1 #}
                 {{ form_errors(form) }}
 
-                {{ form_row(form.username) }}
+{#                Consigo adicionar classes passando como parametro também#}
+                {{ form_row(form.username, {
+                    'attr': {'class': 'a-clever-class'},
+                    'help': 'Chose a unique Username'
+                }) }}
+
                 {{ form_row(form.email) }}
+
                 {{ form_row(form.plainPassword.first,{
                     'label': 'Password'
                 }) }}
+
                 {{ form_row(form.plainPassword.second, {
                     'label': 'Repeat Password'
                 }) }}

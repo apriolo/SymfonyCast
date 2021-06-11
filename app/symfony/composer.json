@@ -25,7 +25,9 @@
         "symfony/swiftmailer-bundle": "~2.3,>=2.3.10",
         "symfony/symfony": "2.8.*",
         "twig/twig": "^1.0||^2.0",
-        "doctrine/doctrine-fixtures-bundle": "v2.4.1"
+        "doctrine/doctrine-fixtures-bundle": "v2.4.1",
+        "stof/doctrine-extensions-bundle": "~1.1.0",
+        "symfony/assetic-bundle": "^2.8"
     },
     "require-dev": {
         "sensio/generator-bundle": "~3.0",

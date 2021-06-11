@@ -9,6 +9,9 @@ imports:
 # https://symfony.com/doc/current/best_practices/configuration.html#application-related-configuration
 parameters:
     locale: en
+    # adicionando essa variavel consigo acessar via contaier
+    #dentro da aplicacao e nos configs
+    our_assets_version: 5-return-of-the-jedi
 
 framework:
     #esi: ~
@@ -23,6 +26,10 @@ framework:
     #serializer: { enable_annotations: true }
     templating:
         engines: ['twig']
+        assets_version: %our_assets_version%
+        assets_version_format: "%%s?v=%%s"
+        # base url para os assets
+        # assets_base_url: //myfancycdn.com
     default_locale: '%locale%'
     trusted_hosts: ~
     trusted_proxies: ~
@@ -36,6 +43,9 @@ framework:
 twig:
     debug: '%kernel.debug%'
     strict_variables: '%kernel.debug%'
+    form:
+        resources:
+            - "form_theme.html.twig"
 
 # Doctrine Configuration
 doctrine:
@@ -72,3 +82,16 @@ stof_doctrine_extensions :
         default:
             sluggable: true
             timestampable: true
+# no symfony 2.8 é preciso adicionar o require symfony/assetic-bundle
+#assetic:
+#    debug:          '%kernel.debug%'
+#    use_controller: '%kernel.debug%'
+#    filters:
+#        cssrewrite: ~
+#        uglifycss:
+#            bin: "%kernel.root_dir%\\..\\node_modules\\bin\\uglifycss"
+assetic:
+    filters:
+        uglifycss:
+            bin: "%kernel.root_dir%\\..\\node_modules\\bin\\uglifycss"
+        cssrewrite: ~

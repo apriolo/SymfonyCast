@@ -4,3 +4,7 @@ app/symfony/vendor
 app/symfony/app/cache
 app/symfony/app/logs
 app/symfony/bin
+app/symfony/web/css
+app/symfony/web/js
+app/symfony/node_modules
+app/symfony/app/logs/
